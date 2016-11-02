@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Matching Game</title>
+		<!-- styling for the leftside and right side divs -->
+		<style>
+			img{position: absolute;}
+
+			div{position: absolute; width: 490px; height: 600px;}
+
+			#rightSide{left: 500px; border-left: 1px solid black}
+			
+		</style>
+	</head>
+	<body>
+		<h1>Matching Game</h1>
+		<p>Click on the extra smiling face on the left</p>
+		<br>
+		<div id="leftSide">
+
+		</div>
+		<div id="rightSide">
+			
+		</div>
+	<script>
+		// variable declaration
+		var numberOfFaces = 5;
+		var theLeftSide = document.getElementById("leftSide");
+		var theRightSide = document.getElementById("rightSide");
+		var theBody = document.getElementsByTagName("body")[0];
+
+		function generateFaces()
+		{
+			var count = 0;
+
+			while(count < numberOfFaces)
+			{
+				/* 
+                   0. Create function and a while loop to loop while counter is less than the number of faces
+				   1. Create an img element 
+				   2. Set a random number between 0 to 400 to set for left
+				   3. Set a random number between 0 to 510 to set for top
+				   4. Change the attribute for img element to fetch the smiling image
+				   5. Set the style for left and top to the img element to the randomly selected range
+				   6. Append the left div to include this new image element
+				   7. Call the function on page load
+
+				 */
+
+				var this_img = document.createElement("img");
+				var random_left = Math.random() * 400;
+				var random_top = Math.random() * 510;
+
+				random_left = Math.floor(random_left);
+				random_top = Math.floor(random_top);
+				this_img.setAttribute("src", "smile.png");
+				this_img.style.left = random_left + "px";
+				this_img.style.top = random_top + "px";
+				theLeftSide.appendChild(this_img);
+				count++;
+			}
+
+			/* - Create a variable "leftSideImg" to store a copy of the left side images
+			   - Using that copy to delete the last child and append it to the right div
+			   - Create a onclick event for the lastchild if click on will bring the game to the next level
+			   - Also create a on click function for the body element so that if the player select the 
+			     wrong slmiling face or other areas of the body, it will end the game
+			*/
+
+			var leftSideImg = theLeftSide.cloneNode(true);
+			leftSideImg.removeChild(leftSideImg.lastChild);
+
+			theRightSide.appendChild(leftSideImg);
+
+			theLeftSide.lastChild.onclick = 
+			function nextlevel(event)
+			{
+				event.stopPropagation();
+				numberOfFaces += 5;
+				while(theLeftSide.firstChild)
+				{
+					theLeftSide.removeChild(theLeftSide.firstChild);
+				}
+				while(theRightSide.firstChild)
+				{
+					theRightSide.removeChild(theRightSide.firstChild);
+				}
+				generateFaces();
+			};
+
+			theBody.onclick = 
+			function gameOver()
+			{
+				alert("Game Over!");
+				theBody.onclick = null;
+				theLeftSide.lastChild.onclick = null;
+			};
+		}
+
+		window.onload = generateFaces;
+	</script>
+	</body>
+</html>
